@@ -1,0 +1,24 @@
+RECLET -- a recursive LET for Common Lisp
+
+This is close to macro LETREC but different. RECLET recursively defines the variables, not functions. It uses a laziness and SYMBOL-MACROLET to create recursive bindings. Unfortunately, the current implementation is not thread safe.
+
+Example 1: Fibonacci Sequence (using Generic Sequences)
+
+(defparameter *fibs*
+  (reclet 
+      ((fibs (seq->stream
+              (seq-cons
+               1 (seq-cons
+                  1 (seq-map 
+                     #'+
+                     (delay-seq fibs)
+                     (delay-seq (seq-cdr fibs))))))))
+    fibs))
+
+Example 2: Not-strict Order
+
+(reclet
+    ((a c)
+     (b 2)
+     (c (+ b 1)))
+   (list :a a :b b :c c))
