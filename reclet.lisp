@@ -4,33 +4,16 @@
 ;;;; Licensed under MIT. See LICENSE for details.
 
 (defpackage :reclet
-  (:use :cl)
+  (:use :cl :lazy)
   (:export #:reclet))
 
 (in-package :reclet)
-
-(defun memo (fun)
-  (let ((already-run? nil)
-        (result nil))
-    #'(lambda ()
-        (if (not already-run?)
-            (progn
-              (setf result (funcall fun))
-              (setf already-run? t)
-              result)
-            result))))
-
-(defmacro delay (exp)
-  `(memo #'(lambda() ,exp)))
-
-(defun force (delayed-exp)
-  (funcall delayed-exp))
 
 ;;(defmacro reclet (((name value)) &body body)
 ;;  (let ((x (gensym)))
 ;;    `(let ((,x (cons nil nil)))
 ;;       (symbol-macrolet ((,name (force (car ,x))))
-;;         (setf (car ,x) (delay ,value))
+;;         (setf (car ,x) (delay ,value :thread-safe t))
 ;;         ,@body))))
 
 (defmacro reclet (decls &body body)
@@ -44,7 +27,8 @@
        (gen-symbol-macrolet (info)
          `(,(getf info :name) (force ,(getf info :gen))))
        (gen-setf (info)
-         `(setf ,(getf info :gen) (delay ,(getf info :value))))
+         `(setf ,(getf info :gen) (delay ,(getf info :value) 
+                                         :thread-safe t)))
        (gen-lets (infos)
          (loop for info in infos collect (gen-let info)))
        (gen-symbol-macrolets (infos)

@@ -7,6 +7,7 @@
   :version "0.1"
   :description "A recursive LET for Common Lisp."
   :licence "MIT"
+  :depends-on (trivial-lazy)
   :components ((:file "reclet")
                (:static-file "README")))
 

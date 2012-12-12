@@ -1,6 +1,6 @@
 RECLET -- a recursive LET for Common Lisp
 
-This is close to macro LETREC but different. RECLET recursively defines the variables, not functions. It uses a laziness and SYMBOL-MACROLET to create recursive bindings. Unfortunately, the current implementation is not thread safe.
+This is close to macro LETREC but different. RECLET recursively defines the variables, not functions. It uses a laziness and SYMBOL-MACROLET to create recursive bindings. Moreover, the recent implementation is thread safe.
 
 Example 1: Fibonacci Sequence (using Generic Sequences)
 
