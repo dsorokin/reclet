@@ -4,7 +4,7 @@
 ;;;; Licensed under MIT. See LICENSE for details.
 
 (defpackage :reclet
-  (:use :cl :lazy)
+  (:use :cl :trivial-lazy)
   (:export #:reclet))
 
 (in-package :reclet)
